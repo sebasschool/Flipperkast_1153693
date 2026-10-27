@@ -1,6 +1,6 @@
 #include <Servo.h>  // bibliotheek voor de servos
 #include <Wire.h> // I2C communicatie
-#define IRpin 5
+#define IRpin 5 
 #define IRpin2 3
 // blauw van de motor is plus
 Servo flipper1;  // roept een blueprint aan uit de library (vertelt wat de servo kan en welke commands hij gebruikt)
@@ -88,7 +88,7 @@ void loop() {
 
 // een funcie die de puntentelling regelt
 void punten() {
-  // zorgt ervoor dat de sensor niet constant punten blijft geven wanneer deze onderbroken word
+  // zorgt ervoor dat de sensor niet constant punten blijft geven wanneer deze getriggerd word
     if (digitalRead(IRpin) != previous_state && digitalRead(IRpin) == 0) {
     ones++;
 
@@ -104,6 +104,7 @@ void punten() {
   }
 }
 
+// deze functie is voor het printen van de variabelen die op de server worden getoond
 void server() {
   Serial.begin(9600);
   score = (tens * 10) + ones;
@@ -114,6 +115,7 @@ void server() {
   Serial.println(machine);
 }
 
+// deze funcite zorgt ervoor dat je score reset en naar de server verstuurd word zodra de tiltsensor afgaat/de ir sensor onderaan de flipperkast getriggerd word
 void tilt_sensor() {
   Wire.beginTransmission(MPUaddr); // open connection
   Wire.write(0x3B); // start with register 0x3B (ACCEL_XOUT_H)
@@ -152,7 +154,8 @@ void tilt_sensor() {
 
   }
 }
-xx
+
+// deze functie past de displays aan aan de hand van de score
 void display() {
   digitalWrite(latchPin, LOW);
   shiftOut(dataPin, clockPin, MSBFIRST, digits[ones]);  // 2e display
@@ -160,6 +163,7 @@ void display() {
   digitalWrite(latchPin, HIGH);
 }
 
+//deze functie zorgt dat je met je led_knopjes je flippers kan bedienen
 void flippers() {
 
   if (digitalRead(button) == HIGH) {
@@ -181,7 +185,7 @@ void flippers() {
     flipper2.write(slag1);
   }
 }
-// telt af van 9 naar 0 soor van start aftellen
+// deze functie telt af van 9 naar 0 soor van start aftellen
 void test_display() {
   for (int i = 9; i>0; i--){
   digitalWrite(latchPin, LOW);
